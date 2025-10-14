@@ -1,9 +1,11 @@
 <?php
-use App\Http\Controllers\RolsController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RolsController;
+use App\Http\Controllers\ProductsController;
 
 Route::get('/', function () {
-    return redirect()->route('rols.index');
+    return view('home'); // 👈 Nueva vista principal
 });
 
 Route::resource('rols', RolsController::class);
+Route::resource('products', ProductsController::class);
