@@ -1,22 +1,38 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Crear Rol</h1>
+<div class="max-w-lg mx-auto bg-white shadow-md rounded-xl p-8 mt-10">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Crear Nuevo Rol</h1>
 
-@if ($errors->any())
-    <ul style="color:red;">
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-@endif
+    @if ($errors->any())
+        <div class="bg-red-100 text-red-700 p-4 mb-4 rounded-lg">
+            <ul class="list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-<form action="{{ route('rols.store') }}" method="POST">
-    @csrf
-    <label>Nombre del rol:</label>
-    <input type="text" name="rol_name" value="{{ old('rol_name') }}">
-    <button type="submit">Guardar</button>
-</form>
+    <form action="{{ route('rols.store') }}" method="POST" class="space-y-5">
+        @csrf
 
-<a href="{{ route('rols.index') }}">Volver a la lista</a>
+        <div>
+            <label for="rol_name" class="block text-sm font-semibold text-gray-700 mb-2">
+                Nombre del Rol
+            </label>
+            <input type="text" id="rol_name" name="rol_name" value="{{ old('rol_name') }}"
+                   class="w-full border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 rounded-lg p-2.5 outline-none" 
+                   placeholder="Ej: Administrador, Cajero, Vendedor...">
+        </div>
+
+        <div class="flex justify-between items-center pt-4">
+            <a href="{{ route('rols.index') }}"
+               class="text-gray-600 hover:text-gray-900 text-sm underline">
+               ← Volver a la lista
+            </a>
+            <button type="submit" class="btn-primary">Guardar Rol</button>
+        </div>
+    </form>
+</div>
 @endsection
