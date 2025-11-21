@@ -1,40 +1,44 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Editar Producto</h1>
 
-    @if ($errors->any())
-        <ul style="color:red;">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
+<h1>Crear Usuario</h1>
 
-    <form action="{{ route('products.update', $product->id) }}" method="POST">
-        @csrf
-        @method('PUT')
+@if ($errors->any())
+    <ul style="color:red;">
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+@endif
 
-        <label>Nombre del producto:</label><br>
-        <input type="text" name="product_name" value="{{ old('product_name', $product->product_name) }}"><br><br>
+<form action="{{ route('productscategorys.store') }}" method="POST">
+    @csrf
+    @method('PUT')
 
-        <label>Precio:</label><br>
-        <input type="number" step="0.01" name="price" value="{{ old('price', $product->price) }}"><br><br>
+    <label>Nombre del producto</label>
+    <input type="text" name="product_name" value="{{ old('product_name') }}">
 
-        <label>Categoría:</label><br>
-        <select name="category_id">
-            <option value="">Sin categoría</option>
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}"
-                    {{ $product->category_id == $category->id ? 'selected' : '' }}>
-                    {{ $category->category_name }}
-                </option>
-            @endforeach
-        </select><br><br>
+    <label>Contraseña:</label>
+    <input type="password" name="password">
 
-        <button type="submit">Actualizar</button>
-    </form>
+    <label>Precio:</label>
+    <input type="text" name="price">
 
-    <br>
-    <a href="{{ route('products.index') }}">Volver</a>
+
+    <label>Categoria:</label>
+    <select name="category">
+        <option value="">-- Selecciona una categoria --</option>
+        @foreach($categories as $productscategory)
+            <option value="{{ $productscategory->id }}" {{ old('category') == $productscategory->id ? 'selected' : '' }}>
+                {{ $productscategory->category_name }}
+            </option>
+        @endforeach
+    </select>
+
+    <button type="submit">Actualizar</button>
+</form>
+
+<a href="{{ route('users.index') }}">Volver a la lista</a>
+
 @endsection
