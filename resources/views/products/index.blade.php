@@ -26,7 +26,7 @@
 
         <td>{{ $product->product_name }}</td>
         <td>{{ $product->price }}</td>
-        <td>{{ $product->products_categorys->category_name }}</td>
+        <td>{{ optional($product->products_categorys)->category_name ?? 'Sin categoría' }}</td>
         <td>
             <a href="{{ route('products.edit', $product->id) }}">Editar</a>
 

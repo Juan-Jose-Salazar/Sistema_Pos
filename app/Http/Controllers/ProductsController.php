@@ -33,7 +33,8 @@ class ProductsController extends Controller
         Products::create([
             'product_name' => $request->product_name,
             'price' => $request-> price,
-            'category' => $request->category
+            'category_id' => $request->category
+
         ]);
 
         return redirect()->route('products.index')->with('success', 'Producto agregado correctamente');

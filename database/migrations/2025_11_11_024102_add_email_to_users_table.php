@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-                if (!Schema::hasColumn('users', 'email')) {
-            $table->string('email', 100)->after('full_name');
+        // Agregar la columna email solo si no existe
+        if (! Schema::hasColumn('users', 'email')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->string('email', 100)->after('full_name');
+            });
         }
     }
 
@@ -21,8 +24,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('email');
-        });
+        // Eliminar la columna email solo si existe
+        if (Schema::hasColumn('users', 'email')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('email');
+            });
+        }
     }
 };
