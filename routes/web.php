@@ -70,6 +70,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/products/destroy/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
 
     Route::get('/invoices', [InvoicesController::class, 'index'])->name('invoices.index');
+    Route::get('/invoices/{invoice}', [InvoicesController::class, 'show'])->name('invoices.show');
 
     Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
     Route::get('/orders/create', [OrdersController::class, 'create'])->name('orders.create');

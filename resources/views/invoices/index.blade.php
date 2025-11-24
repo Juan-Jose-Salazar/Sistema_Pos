@@ -27,6 +27,7 @@
                     <th>Cajero</th>
                     <th>Total</th>
                     <th>Fecha</th>
+                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,6 +40,11 @@
                         <td>{{ optional($invoice->cashierRelation)->full_name ?? '—' }}</td>
                         <td>${{ number_format($invoice->total, 2) }}</td>
                         <td>{{ $invoice->date ?? '—' }}</td>
+                        <td class="text-center">
+                            <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fa-solid fa-file-invoice"></i> Ver detalle
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

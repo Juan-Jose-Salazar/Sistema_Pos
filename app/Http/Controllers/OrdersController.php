@@ -19,7 +19,9 @@ class OrdersController extends Controller
         $orders = Order::with(['clientRelation', 'waiterRelation', 'details.productRelation', 'invoice'])
             ->latest()
             ->get();
-        return view('orders.index', compact('orders'));
+        $cashiers = $this->getCashiers();
+
+        return view('orders.index', compact('orders', 'cashiers'));
     }
 
     public function create()
@@ -142,7 +144,7 @@ class OrdersController extends Controller
                 [
                     'date' => now(),
                     'total' => $total,
-                    'cashier' => auth()->id() ?? optional($order->invoice)->cashier ?? 1,
+                     'cashier' => optional($order->invoice)->cashier ?? auth()->id(),
                 ]
             );
 
@@ -155,8 +157,12 @@ class OrdersController extends Controller
         }
     }
 
-    public function markPaid(Order $order)
+        public function markPaid(Request $request, Order $order)
     {
+         $request->validate([
+            'cashier' => 'required|exists:users,id',
+        ]);
+
         DB::beginTransaction();
 
         try {
@@ -173,7 +179,7 @@ class OrdersController extends Controller
                 [
                     'date' => now(),
                     'total' => $total,
-                    'cashier' => auth()->id() ?? optional($order->invoice)->cashier ?? 1,
+                    'cashier' => $request->input('cashier'),
                 ]
             );
 
@@ -195,6 +201,21 @@ class OrdersController extends Controller
                 ->orWhere('id_rol', 9)
                 ->orWhereHas('rol', function ($subquery) {
                     $subquery->whereRaw('LOWER(rol_name) = ?', ['mesero']);
+                });
+        })
+        ->orderBy('full_name')
+        ->get();
+    }
+
+    private function getCashiers()
+    {
+        $cashierRoleIds = Rol::whereRaw('LOWER(rol_name) = ?', ['cajero'])->pluck('id');
+
+        return User::where(function ($query) use ($cashierRoleIds) {
+            $query->whereIn('id_rol', $cashierRoleIds)
+                ->orWhere('id_rol', 9)
+                ->orWhereHas('rol', function ($subquery) {
+                    $subquery->whereRaw('LOWER(rol_name) = ?', ['cajero']);
                 });
         })
         ->orderBy('full_name')

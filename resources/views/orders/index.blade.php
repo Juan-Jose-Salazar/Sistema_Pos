@@ -69,7 +69,20 @@
                             @if (!$order->is_paid)
                                 <form action="{{ route('orders.markPaid', $order) }}" method="POST" class="d-inline">
                                     @csrf
-                                    <button type="submit" class="btn btn-sm btn-warning text-dark">Pago realizado</button>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <select name="cashier" class="form-select form-select-sm" required>
+                                            <option value="">Selecciona cajero</option>
+                                            @foreach ($cashiers as $cashier)
+                                                <option value="{{ $cashier->id }}" {{ auth()->id() === $cashier->id ? 'selected' : '' }}>
+                                                    {{ $cashier->full_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <button type="submit" class="btn btn-warning text-dark">Pago realizado</button>
+                                    </div>
+                                    @if ($cashiers->isEmpty())
+                                        <small class="text-danger d-block">No hay cajeros disponibles.</small>
+                                    @endif
                                 </form>
                             @endif
                             <a class="btn btn-sm btn-secondary" href="{{ route('orders.edit', $order) }}">Editar</a>
