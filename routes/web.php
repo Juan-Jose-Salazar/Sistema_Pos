@@ -8,9 +8,11 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\ProductsCategorysController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\OrdersController;
 use App\Models\Clients;
 use App\Models\Order;
+use App\Models\Invoices;
 use App\Models\Products;
 use App\Models\ProductsCategorys;
 use App\Models\Rol;
@@ -25,11 +27,12 @@ Route::middleware('auth')->group(function () {
             'categories' => ProductsCategorys::count(),
             'products' => Products::count(),
             'orders' => Order::count(),
+            'invoices' => Invoices::count(),
             'roles' => Rol::count(),
         ];
 
-        return view('home', compact('stats')); // 👈 Nueva vista principal
-    });
+        return view('home', compact('stats')); 
+    })->name('home');
 
     Route::get('/rols', [RolsController::class, 'index'])->name('rols.index');
     Route::get('/rols/create', [RolsController::class, 'create'])->name('rols.create');
@@ -65,6 +68,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/edit/{product}', [ProductsController::class, 'edit'])->name('products.edit');
     Route::put('/products/update/{product}', [ProductsController::class, 'update'])->name('products.update');
     Route::delete('/products/destroy/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
+
+    Route::get('/invoices', [InvoicesController::class, 'index'])->name('invoices.index');
 
     Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
     Route::get('/orders/create', [OrdersController::class, 'create'])->name('orders.create');

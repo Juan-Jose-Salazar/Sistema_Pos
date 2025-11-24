@@ -1,40 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
+<h1>Productos</h1>
 
-<h1>Editar Producto</h1>
-
-@if ($errors->any())
-    <ul style="color:red;">
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
+@if(session('success'))
+    <div style="color:green;">{{ session('success') }}</div>
 @endif
 
-<form action="{{ route('products.update', $product->id) }}" method="POST">
-    @csrf
-    @method('PUT')
+<a href="{{ route('products.create') }}">Agregar Producto</a>
 
-    <label>Nombre del producto</label>
-    <input type="text" name="product_name" value="{{ old('product_name', $product->product_name) }}">
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+    </tr>
 
-    <label>Precio:</label>
-    <input type="text" name="price" value="{{ old('price', $product->price) }}">
-
-    <label>Categoria:</label>
-    <select name="category">
-        <option value="">-- Selecciona una categoria --</option>
-        @foreach($categories as $productscategory)
-        <option value="{{ $productscategory->id }}" {{ old('category', $product->category_id) == $productscategory->id ? 'selected' : '' }}>
-                {{ $productscategory->category_name }}
-            </option>
-        @endforeach
-    </select>
-
-    <button type="submit">Actualizar</button>
-</form>
-
-<a href="{{ route('products.index') }}">Volver a la lista</a>
-
+    @forelse($products as $product)
+    <tr>
+        <td>{{ $product->product_name }}</td>
+        <td>{{ $product->price }}</td>
+        <td>{{ $product->products_categorys->category_name ?? 'Sin categoría' }}</td>
+        <td>
+            <a href="{{ route('products.edit', $product->id) }}">Editar</a>
+            <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" onclick="return confirm('¿Seguro que quieres eliminar este producto?');">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+    @empty
+    <tr>
+        <td colspan="4">No hay productos registrados.</td>
+    </tr>
+    @endforelse
+</table>
 @endsection

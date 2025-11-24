@@ -37,6 +37,14 @@
             </div>
         </div>
         <div class="card">
+            <div class="label">Facturas</div>
+            <div class="value">{{ $stats['invoices'] ?? 0 }}</div>
+            <div class="card-actions">
+                <span class="pill"><i class="fa-solid fa-file-invoice-dollar"></i> Cobros</span>
+                <a class="secondary-link" href="{{ route('invoices.index') }}">Ver facturas <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="card">
             <div class="label">Clientes</div>
             <div class="value">{{ $stats['clients'] ?? 0 }}</div>
             <div class="card-actions">
@@ -62,7 +70,7 @@
         </div>
     </div>
     
-     <div style="margin-top:32px;" class="grid grid-cols-3">
+    <div style="margin-top:32px;" class="grid grid-cols-3">
         <div class="card" style="grid-column: span 2;">
             <div class="section-title">Accesos rápidos</div>
             <div class="section-description">Accede a las funciones más comunes sin salir del panel principal.</div>
@@ -71,12 +79,12 @@
                 <a class="btn-primary" href="{{ route('products.create') }}"><i class="fa-solid fa-circle-plus"></i> Crear producto</a>
                 <a class="btn-primary" href="{{ route('clients.create') }}"><i class="fa-solid fa-user-plus"></i> Nuevo cliente</a>
                 <a class="btn-primary" href="{{ route('productscategorys.create') }}"><i class="fa-solid fa-layer-group"></i> Nueva categoría</a>
+                <a class="btn-primary" href="{{ route('invoices.index') }}"><i class="fa-solid fa-file-invoice-dollar"></i> Revisar facturas</a>
             </div>
         </div>
         <div class="card">
-            <div class="section-title">Consejo</div>
-            <div class="section-description">Mantén tus productos organizados en categorías para agilizar el proceso de venta y la búsqueda.</div>
-            <a class="secondary-link" href="{{ route('productscategorys.index') }}">Organizar categorías <i class="fa-solid fa-arrow-right"></i></a>
+            <div class="section-title">profe ponganos 5</div>
+            <div class="section-description">me dicen que quieren que ponga aqui o si quieren lo quito</div>
         </div>
     </div>
 </div>

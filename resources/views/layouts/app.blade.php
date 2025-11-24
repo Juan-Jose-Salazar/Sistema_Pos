@@ -182,6 +182,7 @@
             <div class="nav-links">
                 <a href="{{ url('/') }}"><i class="fa-solid fa-house"></i>Inicio</a>
                 <a href="{{ route('orders.index') }}"><i class="fa-solid fa-receipt"></i>Órdenes</a>
+                <a href="{{ route('invoices.index') }}"><i class="fa-solid fa-file-invoice-dollar"></i>Facturas</a>
                 <a href="{{ route('products.index') }}"><i class="fa-solid fa-box"></i>Productos</a>
                 <a href="{{ route('productscategorys.index') }}"><i class="fa-solid fa-sitemap"></i>Categorías</a>
                 <a href="{{ route('clients.index') }}"><i class="fa-solid fa-users"></i>Clientes</a>
