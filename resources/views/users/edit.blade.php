@@ -18,6 +18,9 @@
     <label>Nombre del usuario:</label>
     <input type="text" name="full_name" value="{{ old('full_name', $user->full_name) }}">
 
+    <label>Email:</label>
+    <input type="email" name="email" value="{{ old('email', $user->email) }}">
+
     <label>Contraseña:</label>
     <input type="password" name="password" placeholder="Deja vacío si no deseas cambiarla">
 

@@ -17,6 +17,9 @@
     <label>Nombre del usuario:</label>
     <input type="text" name="full_name" value="{{ old('full_name') }}">
 
+    <label>Email:</label>
+    <input type="email" name="email" value="{{ old('email') }}">
+
     <label>Contraseña:</label>
     <input type="password" name="password">
 

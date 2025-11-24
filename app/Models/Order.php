@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Orders;
 use App\Models\Clients;
-use App\Models\Products;
-use App\Models\Users;
+use App\Models\User;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,7 +22,7 @@ class Order extends Model
     }
 
     public function waiter(){
-        return $this->belongsTo(Users::class,'waiter');
+        return $this->belongsTo(User::class,'waiter');
     }
 
     public function details(){
