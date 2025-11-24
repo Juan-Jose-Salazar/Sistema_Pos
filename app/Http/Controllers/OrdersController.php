@@ -16,7 +16,7 @@ class OrdersController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['client', 'waiter'])
+        $orders = Order::with(['clientRelation', 'waiterRelation', 'details.product', 'invoice'])
             ->latest()
             ->get();
         return view('orders.index', compact('orders'));
@@ -50,7 +50,7 @@ class OrdersController extends Controller
             ]);
 
             foreach ($request->products as $index => $productId) {
-                $quantity = $request->quantities[$index];
+                $quantity = max(1,(int) $request->quantities[$index]);
                 $product = Products::findOrFail($productId);
 
                 OrdersDetails::create([
@@ -102,7 +102,7 @@ class OrdersController extends Controller
             OrdersDetails::where('order',$order->id)->delete();
 
             foreach ($request->products as $index => $productId) {
-                $quantity = $request->quantities[$index];
+                $quantity = max(1,(int) $request->quantities[$index]);
                 $product = Products::findOrFail($productId);
 
                 OrdersDetails::create([
@@ -133,17 +133,18 @@ class OrdersController extends Controller
                 ]);
             }
 
-            if (!$order->invoice) {
-                $total = OrdersDetails::where('order', $order->id)
-                    ->sum(DB::raw('amount * unit_price'));
+            $order->loadMissing('details.product');
 
-                Invoices::create([
+                $total = $order->calculateTotal();
+
+            $order->invoice()->updateOrCreate(
+                ['order' => $order->id],
+                [
                     'date' => now(),
                     'total' => $total,
-                    'order' => $order->id,
-                    'cashier' => auth()->id() ?? 1,
-                ]);
-            }
+                    'cashier' => auth()->id() ?? optional($order->invoice)->cashier ?? 1,
+                ]
+            );
 
             DB::commit();
 
@@ -151,6 +152,37 @@ class OrdersController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'No se pudo marcar el pedido: ' . $e->getMessage());
+        }
+    }
+
+    public function markPaid(Order $order)
+    {
+        DB::beginTransaction();
+
+        try {
+            $order->loadMissing('details.product');
+
+            if ($order->details->isEmpty()) {
+                return redirect()->back()->with('error', 'No se puede registrar el pago sin productos.');
+            }
+
+            $total = $order->calculateTotal();
+
+            $order->invoice()->updateOrCreate(
+                ['order' => $order->id],
+                [
+                    'date' => now(),
+                    'total' => $total,
+                    'cashier' => auth()->id() ?? optional($order->invoice)->cashier ?? 1,
+                ]
+            );
+
+            DB::commit();
+
+            return redirect()->route('orders.index')->with('success', 'Pago registrado correctamente');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'No se pudo registrar el pago: ' . $e->getMessage());
         }
     }
 

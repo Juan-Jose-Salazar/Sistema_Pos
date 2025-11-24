@@ -105,7 +105,9 @@
         selectedProducts.forEach((p, index) => {
             const option = productSelect.querySelector(`option[value="${p.product}"]`);
             const label = option ? option.text : 'Producto eliminado';
-            const subtotal = (p.amount * p.unit_price).toFixed(2);
+            const quantity = Number(p.amount) || 1;
+            const unitPrice = Number(p.unit_price) || 0;
+            const subtotal = (quantity * unitPrice).toFixed(2);
 
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -114,10 +116,10 @@
                     <input type="hidden" name="products[]" value="${p.product}">
                 </td>
                 <td>
-                    ${p.amount}
-                    <input type="hidden" name="quantities[]" value="${p.amount}">
+                    ${quantity}
+                    <input type="hidden" name="quantities[]" value="${quantity}">
                 </td>
-                <td>$${Number(p.unit_price).toFixed(2)}</td>
+                <td>$${unitPrice.toFixed(2)}</td>
                 <td>$${subtotal}</td>
                 <td class="text-center">
                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeProduct(${index})">X</button>
