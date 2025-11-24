@@ -16,7 +16,7 @@ class OrdersController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['clientRelation', 'waiterRelation', 'details.product', 'invoice'])
+        $orders = Order::with(['clientRelation', 'waiterRelation', 'details.productRelation', 'invoice'])
             ->latest()
             ->get();
         return view('orders.index', compact('orders'));
@@ -76,7 +76,7 @@ class OrdersController extends Controller
         $users = $this->getWaiters();
         $products = Products::all();
 
-        $order->load(['details.product']);
+        $order->load(['details.productRelation']);
 
         return view('orders.edit', compact('order', 'users', 'clients', 'products'));
     }
@@ -133,7 +133,7 @@ class OrdersController extends Controller
                 ]);
             }
 
-            $order->loadMissing('details.product');
+            $order->loadMissing('details.productRelation');
 
                 $total = $order->calculateTotal();
 
@@ -160,7 +160,7 @@ class OrdersController extends Controller
         DB::beginTransaction();
 
         try {
-            $order->loadMissing('details.product');
+            $order->loadMissing('details.productRelation');
 
             if ($order->details->isEmpty()) {
                 return redirect()->back()->with('error', 'No se puede registrar el pago sin productos.');

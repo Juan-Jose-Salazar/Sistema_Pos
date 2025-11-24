@@ -97,25 +97,27 @@
 </div>
 
 <script>
-    let selectedProducts = @json(
-    ($order->details ?? collect())
-        ->map(function ($detail) {
-            return [
-                'product' => $detail->product,
-                'amount' => $detail->amount ?? 1,
-                'unit_price' => $detail->unit_price ?? optional($detail->product)->price ?? 0,
-            ];
-        })
-        ->values()
-    );
+    @php
+        $selectedProducts = ($order->details ?? collect())
+            ->map(function ($detail) {
+                return [
+                    'product' => $detail->product,
+                    'amount' => $detail->amount ?? 1,
+                    'unit_price' => $detail->unit_price ?? optional($detail->product)->price ?? 0,
+                ];
+            })
+            ->values();
+    @endphp
 
-     selectedProducts = (selectedProducts || []).map((item) => ({
+    let selectedProducts = @json($selectedProducts);
+
+    selectedProducts = (selectedProducts || []).map((item) => ({
         ...item,
         product: String(item.product),
         amount: Number(item.amount) || 1,
         unit_price: Number(item.unit_price) || 0,
     }));
-    
+
     const productSelect = document.getElementById('productSelect');
     const productAmount = document.getElementById('productAmount');
     const addProductBtn = document.getElementById('addProductBtn');

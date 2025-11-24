@@ -32,7 +32,7 @@ class ProductsController extends Controller
 
         Products::create([
             'product_name' => $request->product_name,
-            'price' => $request-> price,
+            'price' => $request->price,
             'category_id' => $request->category
 
         ]);
@@ -42,9 +42,8 @@ class ProductsController extends Controller
 
     public function edit(Products $product)
     {
-        $products = Products::all();
         $categories = ProductsCategorys::all();
-        return view('productscategorys.edit', compact('product','categories'));
+        return view('products.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, Products $product)
@@ -55,15 +54,20 @@ class ProductsController extends Controller
             'category' => 'required|exists:products_categorys,id'
         ]);
 
-        $product->update($request->all());
-        return redirect()->route('productscategorys.index')->with('success', 'Producto actualizado correctamente');//
+         $product->update([
+            'product_name' => $request->product_name,
+            'price' => $request->price,
+            'category_id' => $request->category,
+        ]);
+
+        return redirect()->route('products.index')->with('success', 'Producto actualizado correctamente');
 
     }
 
     public function destroy(Products $product)
     {
             $product->delete();
-        return redirect()->route('productscategorys.index')->with('success', 'producto eliminado correctamente');//
+        return redirect()->route('products.index')->with('success', 'producto eliminado correctamente');
     }
 
 }

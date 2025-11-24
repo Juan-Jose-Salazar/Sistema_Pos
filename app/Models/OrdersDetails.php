@@ -20,7 +20,7 @@ class OrdersDetails extends Model
         return $this->belongsTo(Order::class,'order');
     }
 
-    public function product(){
+    public function productRelation(){
         return $this->belongsTo(Products::class,'product');
     }
 }

@@ -2,42 +2,39 @@
 
 @section('content')
 
-<h1>Lista de products</h1>
+<h1>Editar Producto</h1>
 
-@if(session('success'))
-    <div style="color:green;">
-        {{ session('success') }}
-    </div>
+@if ($errors->any())
+    <ul style="color:red;">
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
 @endif
 
-<a href="{{ route('products.create') }}">agregar producto</a>
+<form action="{{ route('products.update', $product->id) }}" method="POST">
+    @csrf
+    @method('PUT')
 
-<table border="1" cellpadding="5">
-    <tr>
+    <label>Nombre del producto</label>
+    <input type="text" name="product_name" value="{{ old('product_name', $product->product_name) }}">
 
-        <th>Nombre Producto</th>
-        <th>Precio</th>
-        <th>Categoria</th>
-        <th>Acciones</th>
-    </tr>
+    <label>Precio:</label>
+    <input type="text" name="price" value="{{ old('price', $product->price) }}">
 
-    @foreach($products as $product)
-    <tr>
+    <label>Categoria:</label>
+    <select name="category">
+        <option value="">-- Selecciona una categoria --</option>
+        @foreach($categories as $productscategory)
+        <option value="{{ $productscategory->id }}" {{ old('category', $product->category_id) == $productscategory->id ? 'selected' : '' }}>
+                {{ $productscategory->category_name }}
+            </option>
+        @endforeach
+    </select>
 
-        <td>{{ $product->product_name }}</td>
-        <td>{{ $product->price }}</td>
-        <td>{{ optional($product->products_categorys)->category_name ?? 'Sin categoría' }}</td>
-        <td>
-            <a href="{{ route('products.edit', $product->id) }}">Editar</a>
+    <button type="submit">Actualizar</button>
+</form>
 
-            <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" onclick="return confirm('¿Seguro que quieres eliminar este producto?');">Eliminar</button>
-            </form>
-        </td>
-    </tr>
-    @endforeach
-</table>
+<a href="{{ route('products.index') }}">Volver a la lista</a>
 
 @endsection

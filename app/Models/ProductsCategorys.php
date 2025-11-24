@@ -2,7 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Product;
+use App\Models\Products;
 
 class ProductsCategorys extends Model
 {
@@ -13,7 +13,6 @@ class ProductsCategorys extends Model
 
     public function products()
     {
-        // Ajusta 'id_category' si tu FK en products se llama distinto
-        return $this->hasMany(Product::class, 'id_category');
+       return $this->hasMany(Products::class, 'category_id');
     }
 }

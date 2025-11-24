@@ -48,7 +48,7 @@
                                 <ul class="mb-0">
                                     @foreach ($order->details as $detail)
                                         <li>
-                                            {{ optional($detail->product)->product_name ?? 'Producto eliminado' }}
+                                            {{ optional($detail->productRelation)->product_name ?? 'Producto eliminado' }}
                                             (x{{ $detail->amount }}) -
                                             ${{ number_format($detail->unit_price, 2) }}
                                         </li>
